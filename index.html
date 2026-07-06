@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kenny's Desk Box 🏦</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+
+<!-- Top Bar -->
+<div class="top-bar">
+  <div class="logo">🏦 <span>Kenny's Desk Box</span></div>
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search ticker... (700, NVDA, 1888, PLTR...)" autofocus>
+    <div id="searchResults" class="search-results hidden"></div>
+  </div>
+  <div class="status-bar">
+    <span id="statusFutu" class="status-dot red"></span> Futu
+    <span id="statusTime" class="status-time"></span>
+  </div>
+</div>
+
+<div class="main-layout">
+  <!-- Left: Main Content -->
+  <div class="content-area" id="mainContent">
+
+    <!-- ═══ WATCHLIST OVERVIEW ═══ -->
+    <div id="watchlistSection" class="watchlist-section">
+      <div class="watchlist-header">
+        <span class="watchlist-title">📋 Watchlist</span>
+        <span class="watchlist-time" id="watchlistTime">--</span>
+        <button class="watchlist-refresh-btn" onclick="fetchWatchlist()">🔄</button>
+      </div>
+      <div id="watchlistGrid" class="watchlist-grid">
+        <div class="loading">Loading watchlist...</div>
+      </div>
+    </div>
+
+    <!-- Welcome Screen -->
+    <div id="welcomeScreen" class="welcome-screen">
+      <div class="welcome-icon">🏦</div>
+      <h1>Desk Box</h1>
+      <p>Type any stock code above or click a watchlist item to see ML signals + interactive charts</p>
+      <div class="quick-links">
+        <button class="quick-btn" onclick="loadStock('HK.00700')">🇭🇰 700 騰訊</button>
+        <button class="quick-btn" onclick="loadStock('US.NVDA')">🇺🇸 NVDA</button>
+        <button class="quick-btn" onclick="loadStock('HK.01888')">🇭🇰 1888 建滔</button>
+        <button class="quick-btn" onclick="loadStock('US.PLTR')">🇺🇸 PLTR</button>
+        <button class="quick-btn" onclick="loadStock('US.RKLB')">🇺🇸 RKLB</button>
+        <button class="quick-btn" onclick="loadStock('HK.02513')">🇭🇰 2513 智譜</button>
+      </div>
+      <div class="welcome-footer">
+        <span id="welcomeStatus">Connecting...</span>
+      </div>
+    </div>
+
+    <!-- Stock Detail View -->
+    <div id="stockView" class="stock-view hidden">
+      <!-- Header Card -->
+      <div class="card stock-header-card">
+        <div class="stock-ticker">
+          <span class="stock-market" id="stockMarket">🇭🇰</span>
+          <span class="stock-code" id="stockCode">700</span>
+          <span class="stock-name" id="stockName">騰訊</span>
+        </div>
+        <div class="stock-price-area">
+          <div class="stock-price" id="stockPrice">--</div>
+          <div class="stock-change" id="stockChange">--</div>
+        </div>
+        <div class="stock-badges">
+          <span class="badge signal-badge" id="signalBadge">⏳</span>
+          <span class="badge" id="positionBadge"></span>
+        </div>
+      </div>
+
+      <!-- ML Signal Card -->
+      <div class="card-grid">
+        <div class="card signal-card">
+          <div class="card-title">📊 ML Signal</div>
+          <div class="signal-value" id="signalValue">--</div>
+          <div class="signal-metrics">
+            <div class="metric"><span class="metric-label">Buy%</span><span class="metric-val" id="buyProb">--</span></div>
+            <div class="metric"><span class="metric-label">Acc</span><span class="metric-val" id="accuracy">--</span></div>
+            <div class="metric"><span class="metric-label">Conf</span><span class="metric-val" id="confidence">--</span></div>
+          </div>
+        </div>
+        <div class="card info-card">
+          <div class="card-title">📈 Price Stats</div>
+          <div class="info-grid">
+            <div class="info-row"><span>1D</span><span class="val" id="chg1d">--</span></div>
+            <div class="info-row"><span>5D</span><span class="val" id="chg5d">--</span></div>
+            <div class="info-row"><span>20D</span><span class="val" id="chg20d">--</span></div>
+            <div class="info-row"><span>52W H</span><span class="val" id="high52w">--</span></div>
+            <div class="info-row"><span>52W L</span><span class="val" id="low52w">--</span></div>
+          </div>
+        </div>
+        <div class="card tech-card">
+          <div class="card-title">🔧 Technicals</div>
+          <div class="info-grid">
+            <div class="info-row"><span>RSI(14)</span><span class="val" id="rsi14">--</span></div>
+            <div class="info-row"><span>RSI(7)</span><span class="val" id="rsi7">--</span></div>
+            <div class="info-row"><span>MACD</span><span class="val" id="macdHist">--</span></div>
+            <div class="info-row"><span>BB Pos</span><span class="val" id="bbPos">--</span></div>
+            <div class="info-row"><span>Stoch</span><span class="val" id="stochK">--</span></div>
+          </div>
+        </div>
+        <div class="card ma-card">
+          <div class="card-title">📉 Moving Averages</div>
+          <div class="info-grid">
+            <div class="info-row"><span>MA5</span><span class="val" id="ma5">--</span></div>
+            <div class="info-row"><span>MA20</span><span class="val" id="ma20">--</span></div>
+            <div class="info-row"><span>MA50</span><span class="val" id="ma50">--</span></div>
+            <div class="info-row"><span>SL</span><span class="val danger" id="stopLoss">--</span></div>
+            <div class="info-row"><span>ATR%</span><span class="val" id="atrPct">--</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Candlestick Chart (Lightweight Charts) -->
+      <div class="card chart-card">
+        <div class="card-title">🕯️ Interactive Candle Stick — <span id="chartLabel">價位圖</span></div>
+        <div class="chart-container" id="chartContainer">
+          <div id="chartLoading" class="chart-loading">Loading chart...</div>
+        </div>
+      </div>
+
+      <!-- Fundamentals Panel (Google Finance data) -->
+      <div id="fundamentalsCard" class="card fundamentals-card hidden">
+        <div class="card-title">🏢 基本面資料 — <span id="fundamentalsName">--</span></div>
+        <div id="fundamentalsGrid" class="fundamentals-grid">
+          <div class="loading">Loading fundamentals...</div>
+        </div>
+        <div id="fundamentalsFooter" class="fundamentals-footer"></div>
+      </div>
+
+      <!-- Position Card (if held) -->
+      <div id="positionCard" class="card position-card hidden">
+        <div class="card-title">💼 Current Position</div>
+        <div class="position-details" id="positionDetails"></div>
+      </div>
+
+      <!-- Backtest Data -->
+      <div id="backtestCard" class="card backtest-card hidden">
+        <div class="card-title">🧪 Backtest Results</div>
+        <div id="backtestDetails" class="backtest-details"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Positions Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">💼 Positions <span class="pos-count" id="posCount">0/5</span></div>
+    <div id="positionsList" class="positions-list">
+      <div class="loading">Loading...</div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="pnl-summary">
+        <span>Total P&L</span>
+        <span id="totalPnl" class="pnl-value">--</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API_BASE = (typeof API_BASE_FROM_CONFIG !== "undefined") ? API_BASE_FROM_CONFIG : window.location.origin;
+</script>
+<script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.2.1/dist/lightweight-charts.standalone.production.js"></script>
+<script src="/static/app.js"></script>
+</body>
+</html>
