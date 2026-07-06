@@ -26,11 +26,24 @@
 <div class="main-layout">
   <!-- Left: Main Content -->
   <div class="content-area" id="mainContent">
+
+    <!-- ═══ WATCHLIST OVERVIEW ═══ -->
+    <div id="watchlistSection" class="watchlist-section">
+      <div class="watchlist-header">
+        <span class="watchlist-title">📋 Watchlist</span>
+        <span class="watchlist-time" id="watchlistTime">--</span>
+        <button class="watchlist-refresh-btn" onclick="fetchWatchlist()">🔄</button>
+      </div>
+      <div id="watchlistGrid" class="watchlist-grid">
+        <div class="loading">Loading watchlist...</div>
+      </div>
+    </div>
+
     <!-- Welcome Screen -->
     <div id="welcomeScreen" class="welcome-screen">
       <div class="welcome-icon">🏦</div>
       <h1>Desk Box</h1>
-      <p>Type any stock code above to see ML signals + real-time data</p>
+      <p>Type any stock code above or click a watchlist item to see ML signals + interactive charts</p>
       <div class="quick-links">
         <button class="quick-btn" onclick="loadStock('HK.00700')">🇭🇰 700 騰訊</button>
         <button class="quick-btn" onclick="loadStock('US.NVDA')">🇺🇸 NVDA</button>
@@ -106,20 +119,21 @@
         </div>
       </div>
 
-      <!-- Price Chart -->
+      <!-- Interactive Candlestick Chart (Lightweight Charts) -->
       <div class="card chart-card">
-        <div class="card-title">📈 Price Chart (60 days)</div>
-        <div class="chart-container">
-          <canvas id="priceChart"></canvas>
+        <div class="card-title">🕯️ Interactive Candle Stick — <span id="chartLabel">價位圖</span></div>
+        <div class="chart-container" id="chartContainer">
+          <div id="chartLoading" class="chart-loading">Loading chart...</div>
         </div>
       </div>
 
-      <!-- Volume Chart -->
-      <div class="card chart-card">
-        <div class="card-title">📊 Volume</div>
-        <div class="chart-container chart-sm">
-          <canvas id="volumeChart"></canvas>
+      <!-- Fundamentals Panel (Google Finance data) -->
+      <div id="fundamentalsCard" class="card fundamentals-card hidden">
+        <div class="card-title">🏢 基本面資料 — <span id="fundamentalsName">--</span></div>
+        <div id="fundamentalsGrid" class="fundamentals-grid">
+          <div class="loading">Loading fundamentals...</div>
         </div>
+        <div id="fundamentalsFooter" class="fundamentals-footer"></div>
       </div>
 
       <!-- Position Card (if held) -->
@@ -152,12 +166,9 @@
 </div>
 
 <script>
-// API Base URL — for GitHub Pages standalone deployment, create a config.js with:
-//   const API_BASE = 'https://your-tunnel-url.workers.dev';
-// or leave empty (default: same origin)
-const API_BASE = '';
+const API_BASE = (typeof API_BASE_FROM_CONFIG !== "undefined") ? API_BASE_FROM_CONFIG : window.location.origin;
 </script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.2.1/dist/lightweight-charts.standalone.production.js"></script>
 <script src="/static/app.js"></script>
 </body>
 </html>

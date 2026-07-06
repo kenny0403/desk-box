@@ -339,6 +339,65 @@ body {
 }
 .chart-container.chart-sm { height: 120px; }
 .chart-container canvas { width: 100% !important; height: 100% !important; }
+.chart-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #8b949e;
+  font-size: 14px;
+}
+
+/* ─── Fundamentals Card ─── */
+.fundamentals-card { border-left: 3px solid var(--blue); }
+.fundamentals-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+.fund-item {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 10px;
+  background: var(--bg-main);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(48, 54, 61, 0.5);
+}
+.fund-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+  letter-spacing: 0.3px;
+}
+.fund-value {
+  font-size: 15px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text);
+}
+.fund-value.positive { color: var(--green); }
+.fund-value.negative { color: var(--red); }
+.fund-value.muted { color: var(--text-muted); }
+.fund-value.highlight { color: var(--blue); }
+.fundamentals-footer {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(48, 54, 61, 0.4);
+  font-size: 10px;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.fund-source-tag {
+  padding: 2px 8px;
+  background: var(--blue-bg);
+  color: var(--blue);
+  border-radius: 10px;
+  font-weight: 600;
+}
 
 /* ─── Position Card ─── */
 .position-card { border-left: 3px solid var(--blue); }
@@ -367,6 +426,92 @@ body {
 /* ─── Utility ─── */
 .hidden { display: none !important; }
 .loading { color: var(--text-muted); text-align: center; padding: 20px; font-size: 13px; }
+
+/* ─── Watchlist Overview ─── */
+.watchlist-section {
+  margin-bottom: 16px;
+}
+.watchlist-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.watchlist-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+.watchlist-time {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  flex: 1;
+}
+.watchlist-refresh-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  cursor: pointer;
+  padding: 4px 10px;
+  font-size: 14px;
+  transition: all 0.15s;
+}
+.watchlist-refresh-btn:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+.watchlist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 6px;
+}
+.wl-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+}
+.wl-item:hover {
+  border-color: var(--blue);
+  background: var(--bg-card-hover);
+  transform: translateY(-1px);
+}
+.wl-market { font-size: 14px; }
+.wl-ticker {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--blue);
+  flex: 1;
+}
+.wl-price {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  width: 100%;
+}
+.wl-change {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+}
+.wl-positive { color: var(--green); }
+.wl-negative { color: var(--red); }
+
+@media (max-width: 768px) {
+  .watchlist-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+}
 
 /* ─── Responsive ─── */
 @media (max-width: 768px) {
